@@ -26,7 +26,7 @@ class CommonTest extends TestCase
 
         $this->artisan('migrate', [
             '--database' => 'testbench',
-            '--realpath' => realpath(__DIR__ . '/../migrations'),
+            '--realpath' => realpath(__DIR__.'/../migrations'),
         ]);
 
         $this->loadLaravelMigrations(['--database' => 'testbench']);
@@ -35,7 +35,7 @@ class CommonTest extends TestCase
 
         for ($i = 0; $i < 10; $i++) {
             ReportItem::query()->create([
-                'type' => $this->faker->randomElement(['book', 'something-else']),
+                'type'  => $this->faker->randomElement(['book', 'something-else']),
                 'title' => $this->faker->text(),
             ]);
         }
@@ -45,9 +45,9 @@ class CommonTest extends TestCase
     {
         $app['config']->set('database.default', 'testbench');
         $app['config']->set('database.connections.testbench', [
-            'driver' => 'sqlite',
+            'driver'   => 'sqlite',
             'database' => ':memory:',
-            'prefix' => '',
+            'prefix'   => '',
         ]);
 
         Schema::create('books', function ($table) {
@@ -70,8 +70,8 @@ class CommonTest extends TestCase
     public function createRandomUser()
     {
         return User::query()->create([
-            'email' => $this->faker->unique()->email,
-            'name' => $this->faker->name,
+            'email'    => $this->faker->unique()->email,
+            'name'     => $this->faker->name,
             'password' => Hash::make($this->faker->password),
         ]);
     }
@@ -106,18 +106,18 @@ class CommonTest extends TestCase
 
         $this->assertDatabaseHas('larareport_reports', [
             'reportable_type' => $stub->getMorphClass(),
-            'reportable_id' => $stub->id,
-            'user_id' => $user->id,
-            'user_message' => $userMessage,
-            'admin_id' => null,
-            'admin_message' => null,
-            'resolved_at' => null,
+            'reportable_id'   => $stub->id,
+            'user_id'         => $user->id,
+            'user_message'    => $userMessage,
+            'admin_id'        => null,
+            'admin_message'   => null,
+            'resolved_at'     => null,
         ]);
 
         /** @var ReportItem $reportItem */
         foreach ($reportItems as $reportItem) {
             $this->assertDatabaseHas('larareport_rel_report_report_item', [
-                'report_id' => $report->id,
+                'report_id'      => $report->id,
                 'report_item_id' => $reportItem->id,
             ]);
         }
@@ -146,18 +146,18 @@ class CommonTest extends TestCase
 
         $this->assertDatabaseHas('larareport_reports', [
             'reportable_type' => $stub->getMorphClass(),
-            'reportable_id' => $stub->id,
-            'user_id' => $reporter->id,
-            'user_message' => $userMessage,
-            'admin_id' => null,
-            'admin_message' => null,
-            'resolved_at' => null,
+            'reportable_id'   => $stub->id,
+            'user_id'         => $reporter->id,
+            'user_message'    => $userMessage,
+            'admin_id'        => null,
+            'admin_message'   => null,
+            'resolved_at'     => null,
         ]);
 
         /** @var ReportItem $reportItem */
         foreach ($reportItems as $reportItem) {
             $this->assertDatabaseHas('larareport_rel_report_report_item', [
-                'report_id' => $report->id,
+                'report_id'      => $report->id,
                 'report_item_id' => $reportItem->id,
             ]);
         }
@@ -174,7 +174,7 @@ class CommonTest extends TestCase
 
         for ($i = 0; $i < 10; $i++) {
             $data[] = [
-                'reporter' => $this->createRandomUser(),
+                'reporter'    => $this->createRandomUser(),
                 'reportItems' => ReportItem::query()->inRandomOrder()->take(3)->get(),
                 'userMessage' => $this->faker->text,
             ];
@@ -193,18 +193,18 @@ class CommonTest extends TestCase
         foreach ($data as $datum) {
             $this->assertDatabaseHas('larareport_reports', [
                 'reportable_type' => $stub->getMorphClass(),
-                'reportable_id' => $stub->id,
-                'user_id' => $datum['reporter']->id,
-                'user_message' => $datum['userMessage'],
-                'admin_id' => null,
-                'admin_message' => null,
-                'resolved_at' => null,
+                'reportable_id'   => $stub->id,
+                'user_id'         => $datum['reporter']->id,
+                'user_message'    => $datum['userMessage'],
+                'admin_id'        => null,
+                'admin_message'   => null,
+                'resolved_at'     => null,
             ]);
 
             /** @var ReportItem $reportItem */
             foreach ($datum['reportItems'] as $reportItem) {
                 $this->assertDatabaseHas('larareport_rel_report_report_item', [
-                    'report_id' => $datum['report']->id,
+                    'report_id'      => $datum['report']->id,
                     'report_item_id' => $reportItem->id,
                 ]);
             }
@@ -227,7 +227,7 @@ class CommonTest extends TestCase
 
         /** @var Report $report */
         $report = $stub->reports()->save(new Report([
-            'user_id' => $user->id,
+            'user_id'      => $user->id,
             'user_message' => $userMessage,
         ]));
         $report->reportItems()->attach($reportItems->pluck('id')->toArray());
@@ -248,36 +248,36 @@ class CommonTest extends TestCase
 
         $this->assertDatabaseMissing('larareport_reports', [
             'reportable_type' => $stub->getMorphClass(),
-            'reportable_id' => $stub->id,
-            'user_id' => $user->id,
-            'user_message' => $userMessage,
-            'admin_id' => null,
-            'admin_message' => null,
-            'resolved_at' => null,
+            'reportable_id'   => $stub->id,
+            'user_id'         => $user->id,
+            'user_message'    => $userMessage,
+            'admin_id'        => null,
+            'admin_message'   => null,
+            'resolved_at'     => null,
         ]);
 
         /** @var ReportItem $reportItem */
         foreach ($reportItems as $reportItem) {
             $this->assertDatabaseMissing('larareport_rel_report_report_item', [
-                'report_id' => $report->id,
+                'report_id'      => $report->id,
                 'report_item_id' => $reportItem->id,
             ]);
         }
 
         $this->assertDatabaseHas('larareport_reports', [
             'reportable_type' => $stub->getMorphClass(),
-            'reportable_id' => $stub->id,
-            'user_id' => $user->id,
-            'user_message' => $newUserMessage,
-            'admin_id' => null,
-            'admin_message' => null,
-            'resolved_at' => null,
+            'reportable_id'   => $stub->id,
+            'user_id'         => $user->id,
+            'user_message'    => $newUserMessage,
+            'admin_id'        => null,
+            'admin_message'   => null,
+            'resolved_at'     => null,
         ]);
 
         /** @var ReportItem $reportItem */
         foreach ($newReportItems as $reportItem) {
             $this->assertDatabaseHas('larareport_rel_report_report_item', [
-                'report_id' => $newReport->id,
+                'report_id'      => $newReport->id,
                 'report_item_id' => $reportItem->id,
             ]);
         }
@@ -297,7 +297,7 @@ class CommonTest extends TestCase
 
         /** @var Report $report */
         $report = $stub->reports()->save(new Report([
-            'user_id' => $reporter->id,
+            'user_id'      => $reporter->id,
             'user_message' => $userMessage,
         ]));
         $report->reportItems()->attach($reportItems->pluck('id')->toArray());
@@ -318,36 +318,36 @@ class CommonTest extends TestCase
 
         $this->assertDatabaseMissing('larareport_reports', [
             'reportable_type' => $stub->getMorphClass(),
-            'reportable_id' => $stub->id,
-            'user_id' => $reporter->id,
-            'user_message' => $userMessage,
-            'admin_id' => null,
-            'admin_message' => null,
-            'resolved_at' => null,
+            'reportable_id'   => $stub->id,
+            'user_id'         => $reporter->id,
+            'user_message'    => $userMessage,
+            'admin_id'        => null,
+            'admin_message'   => null,
+            'resolved_at'     => null,
         ]);
 
         /** @var ReportItem $reportItem */
         foreach ($reportItems as $reportItem) {
             $this->assertDatabaseMissing('larareport_rel_report_report_item', [
-                'report_id' => $report->id,
+                'report_id'      => $report->id,
                 'report_item_id' => $reportItem->id,
             ]);
         }
 
         $this->assertDatabaseHas('larareport_reports', [
             'reportable_type' => $stub->getMorphClass(),
-            'reportable_id' => $stub->id,
-            'user_id' => $reporter->id,
-            'user_message' => $newUserMessage,
-            'admin_id' => null,
-            'admin_message' => null,
-            'resolved_at' => null,
+            'reportable_id'   => $stub->id,
+            'user_id'         => $reporter->id,
+            'user_message'    => $newUserMessage,
+            'admin_id'        => null,
+            'admin_message'   => null,
+            'resolved_at'     => null,
         ]);
 
         /** @var ReportItem $reportItem */
         foreach ($newReportItems as $reportItem) {
             $this->assertDatabaseHas('larareport_rel_report_report_item', [
-                'report_id' => $newReport->id,
+                'report_id'      => $newReport->id,
                 'report_item_id' => $reportItem->id,
             ]);
         }
@@ -365,7 +365,7 @@ class CommonTest extends TestCase
 
         /** @var Report $report */
         $report = $stub->reports()->save(new Report([
-            'user_id' => $user->id,
+            'user_id'      => $user->id,
             'user_message' => $this->faker->text,
         ]));
 
@@ -373,9 +373,9 @@ class CommonTest extends TestCase
 
         $this->assertDatabaseHas('larareport_reports', [
             'reportable_type' => $stub->getMorphClass(),
-            'reportable_id' => $stub->id,
-            'user_id' => $user->id,
-            'admin_id' => $user->id,
+            'reportable_id'   => $stub->id,
+            'user_id'         => $user->id,
+            'admin_id'        => $user->id,
         ]);
     }
 
@@ -388,7 +388,7 @@ class CommonTest extends TestCase
 
         /** @var Report $report */
         $report = $stub->reports()->save(new Report([
-            'user_id' => $user->id,
+            'user_id'      => $user->id,
             'user_message' => $this->faker->text,
         ]));
 
@@ -396,9 +396,9 @@ class CommonTest extends TestCase
 
         $this->assertDatabaseHas('larareport_reports', [
             'reportable_type' => $stub->getMorphClass(),
-            'reportable_id' => $stub->id,
-            'user_id' => $user->id,
-            'admin_id' => $admin->id,
+            'reportable_id'   => $stub->id,
+            'user_id'         => $user->id,
+            'admin_id'        => $admin->id,
         ]);
     }
 
@@ -409,7 +409,7 @@ class CommonTest extends TestCase
 
         /** @var Report $report */
         $report = $stub->reports()->save(new Report([
-            'user_id' => $user->id,
+            'user_id'      => $user->id,
             'user_message' => $this->faker->text,
         ]));
 
@@ -417,9 +417,9 @@ class CommonTest extends TestCase
 
         $this->assertDatabaseHas('larareport_reports', [
             'reportable_type' => $stub->getMorphClass(),
-            'reportable_id' => $stub->id,
-            'user_id' => $user->id,
-            'admin_id' => null,
+            'reportable_id'   => $stub->id,
+            'user_id'         => $user->id,
+            'admin_id'        => null,
         ]);
     }
 
@@ -431,7 +431,7 @@ class CommonTest extends TestCase
 
         /** @var Report $report */
         $report = $stub->reports()->save(new Report([
-            'user_id' => $user->id,
+            'user_id'      => $user->id,
             'user_message' => $this->faker->text,
         ]));
 
@@ -441,9 +441,9 @@ class CommonTest extends TestCase
 
         $this->assertDatabaseHas('larareport_reports', [
             'reportable_type' => $stub->getMorphClass(),
-            'reportable_id' => $stub->id,
-            'user_id' => $user->id,
-            'admin_id' => $user->id,
+            'reportable_id'   => $stub->id,
+            'user_id'         => $user->id,
+            'admin_id'        => $user->id,
         ]);
 
         $this->assertTrue($report->isResolved());
@@ -458,7 +458,7 @@ class CommonTest extends TestCase
 
         /** @var Report $report */
         $report = $stub->reports()->save(new Report([
-            'user_id' => $user->id,
+            'user_id'      => $user->id,
             'user_message' => $this->faker->text,
         ]));
 
@@ -468,9 +468,9 @@ class CommonTest extends TestCase
 
         $this->assertDatabaseHas('larareport_reports', [
             'reportable_type' => $stub->getMorphClass(),
-            'reportable_id' => $stub->id,
-            'user_id' => $user->id,
-            'admin_id' => $admin->id,
+            'reportable_id'   => $stub->id,
+            'user_id'         => $user->id,
+            'admin_id'        => $admin->id,
         ]);
 
         $this->assertTrue($report->isResolved());
@@ -483,7 +483,7 @@ class CommonTest extends TestCase
 
         /** @var Report $report */
         $report = $stub->reports()->save(new Report([
-            'user_id' => $user->id,
+            'user_id'      => $user->id,
             'user_message' => $this->faker->text,
         ]));
 
@@ -493,9 +493,9 @@ class CommonTest extends TestCase
 
         $this->assertDatabaseHas('larareport_reports', [
             'reportable_type' => $stub->getMorphClass(),
-            'reportable_id' => $stub->id,
-            'user_id' => $user->id,
-            'admin_id' => null,
+            'reportable_id'   => $stub->id,
+            'user_id'         => $user->id,
+            'admin_id'        => null,
         ]);
 
         $this->assertFalse($report->isResolved());
@@ -503,13 +503,12 @@ class CommonTest extends TestCase
 
     public function testUserMethodOfReportModel()
     {
-
         $stub = $this->createRandomStub();
         $user = $this->createRandomUser();
 
         /** @var Report $report */
         $report = $stub->reports()->save(new Report([
-            'user_id' => $user->id,
+            'user_id'      => $user->id,
             'user_message' => $this->faker->text,
         ]));
 
@@ -518,16 +517,15 @@ class CommonTest extends TestCase
 
     public function testAdminMethodOfReportModel()
     {
-
         $stub = $this->createRandomStub();
         $user = $this->createRandomUser();
         $admin = $this->createRandomUser();
 
         /** @var Report $report */
         $report = $stub->reports()->save(new Report([
-            'user_id' => $user->id,
+            'user_id'      => $user->id,
             'user_message' => $this->faker->text,
-            'admin_id' => $admin->id,
+            'admin_id'     => $admin->id,
         ]));
 
         $this->assertEquals($admin->id, $report->admin->id);
@@ -535,13 +533,12 @@ class CommonTest extends TestCase
 
     public function testAdminMethodOfReportModelWhenAdminIsNull()
     {
-
         $stub = $this->createRandomStub();
         $user = $this->createRandomUser();
 
         /** @var Report $report */
         $report = $stub->reports()->save(new Report([
-            'user_id' => $user->id,
+            'user_id'      => $user->id,
             'user_message' => $this->faker->text,
         ]));
 
@@ -555,7 +552,7 @@ class CommonTest extends TestCase
 
         /** @var Report $report */
         $report = $stub->reports()->save(new Report([
-            'user_id' => $user->id,
+            'user_id'      => $user->id,
             'user_message' => $this->faker->text,
         ]));
 
@@ -565,7 +562,7 @@ class CommonTest extends TestCase
 
         foreach ($reportItems as $reportItem) {
             $this->assertDatabaseHas('larareport_rel_report_report_item', [
-                'report_id' => $report->id,
+                'report_id'      => $report->id,
                 'report_item_id' => $reportItem->id,
             ]);
         }
@@ -584,7 +581,7 @@ class CommonTest extends TestCase
 
         /** @var Report $report */
         $report = $stub->reports()->save(new Report([
-            'user_id' => $user->id,
+            'user_id'      => $user->id,
             'user_message' => $this->faker->text,
         ]));
 
@@ -602,7 +599,7 @@ class CommonTest extends TestCase
 
         /** @var Report $report */
         $report = $stub->reports()->save(new Report([
-            'user_id' => $user->id,
+            'user_id'      => $user->id,
             'user_message' => $this->faker->text,
         ]));
 

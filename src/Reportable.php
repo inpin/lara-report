@@ -26,7 +26,7 @@ trait Reportable
      * Fetch records that are reported by a given user.
      * Ex: Book::whereReportedBy(123)->get();.
      *
-     * @param Builder $query
+     * @param Builder          $query
      * @param User|string|null $guard
      *
      * @return Builder|static
@@ -67,6 +67,7 @@ trait Reportable
      * @param array $reportItemIds
      * @param $userMessage $message
      * @param User|string $guard
+     *
      * @return Report
      */
     public function createReport(array $reportItemIds = [], $userMessage = null, $guard = null)
@@ -74,17 +75,19 @@ trait Reportable
         if (!($guard instanceof User)) {
             $guard = $this->loggedInUser($guard);
 
-            if(is_null($guard)) return null;
+            if (is_null($guard)) {
+                return;
+            }
         }
 
         $report = $this->reports()->where('user_id', '=', $guard->id)->first();
 
-        if(!is_null($report)) {
+        if (!is_null($report)) {
             $report->delete();
         }
 
         $report = new Report([
-            'user_id' => $guard->id,
+            'user_id'      => $guard->id,
             'user_message' => $userMessage,
         ]);
 
@@ -108,7 +111,9 @@ trait Reportable
         if (!($guard instanceof User)) {
             $guard = $this->loggedInUser($guard);
 
-            if(is_null($guard)) return false;
+            if (is_null($guard)) {
+                return false;
+            }
         }
 
         return $this->reports()
@@ -155,6 +160,7 @@ trait Reportable
 
     /**
      * Delete reports related to the current record.
+     *
      * @throws \Exception
      */
     public function removeReports()

@@ -8,8 +8,7 @@ use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Collection;
 
 /**
- * Class Report
- * @package Inpin\LaraLike
+ * Class Report.
  *
  * @property int user_id
  * @property int admin_id
@@ -19,7 +18,6 @@ use Illuminate\Support\Collection;
  * @property User admin
  * @property User user
  * @property Collection reportItems
- *
  */
 class Report extends Model
 {
@@ -47,7 +45,7 @@ class Report extends Model
     }
 
     /**
-     * Reporter user
+     * Reporter user.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
@@ -70,11 +68,12 @@ class Report extends Model
      * Resolve current report, (fill 'resolved_at' with current time stamp).
      *
      * @param null $guard
+     *
      * @return bool
      */
     public function resolve($guard = null)
     {
-        if($this->assign($guard)) {
+        if ($this->assign($guard)) {
             $this->resolved_at = Carbon::now();
 
             return $this->save();
@@ -97,6 +96,7 @@ class Report extends Model
      * Assign current report to given admin, if $guard is null will assign to current logged in user.
      *
      * @param User|string|null $guard
+     *
      * @return bool
      */
     public function assign($guard = null)
@@ -104,7 +104,9 @@ class Report extends Model
         if (!($guard instanceof User)) {
             $guard = $this->loggedInUser($guard);
 
-            if(is_null($guard)) return false;
+            if (is_null($guard)) {
+                return false;
+            }
         }
 
         $this->admin_id = $guard->id;
