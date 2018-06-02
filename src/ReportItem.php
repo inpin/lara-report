@@ -6,12 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 
 /**
- * Class ReportItem
- * @package Inpin\LaraLike
+ * Class ReportItem.
  *
  * @property string type
  * @property string title
- *
  * @property Collection reports
  */
 class ReportItem extends Model
