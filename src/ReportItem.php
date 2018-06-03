@@ -7,7 +7,7 @@ use Illuminate\Support\Collection;
 
 /**
  * Class ReportItem
- * @package Inpin\LaraLike
+ * @package Inpin\LaraReport
  *
  * @property string type
  * @property string title

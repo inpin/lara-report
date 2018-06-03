@@ -9,7 +9,7 @@ use Illuminate\Support\Collection;
 
 /**
  * Class Report
- * @package Inpin\LaraLike
+ * @package Inpin\LaraReport
  *
  * @property int user_id
  * @property int admin_id
