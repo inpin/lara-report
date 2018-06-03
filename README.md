@@ -3,10 +3,10 @@ LaraReport
 [![Build Status](https://travis-ci.org/inpin/lara-report.svg?branch=master)](https://travis-ci.org/inpin/lara-report)
 [![StyleCI](https://github.styleci.io/repos/135795948/shield?branch=master)](https://github.styleci.io/repos/135795948)
 [![Maintainability](https://api.codeclimate.com/v1/badges/6032fc52d6dbc3d18f69/maintainability)](https://codeclimate.com/github/inpin/lara-report/maintainability)
-[![Latest Stable Version](https://poser.pugx.org/inpin/lara-report/v/stable)](https://packagist.org/packages/inpin/lara-like)
-[![Total Downloads](https://poser.pugx.org/inpin/lara-report/downloads)](https://packagist.org/packages/inpin/lara-like)
-[![Latest Unstable Version](https://poser.pugx.org/inpin/lara-report/v/unstable)](https://packagist.org/packages/inpin/lara-like)
-[![License](https://poser.pugx.org/inpin/lara-report/license)](https://packagist.org/packages/inpin/lara-like)
+[![Latest Stable Version](https://poser.pugx.org/inpin/lara-report/v/stable)](https://packagist.org/packages/inpin/lara-report)
+[![Total Downloads](https://poser.pugx.org/inpin/lara-report/downloads)](https://packagist.org/packages/inpin/lara-report)
+[![Latest Unstable Version](https://poser.pugx.org/inpin/lara-report/v/unstable)](https://packagist.org/packages/inpin/lara-report)
+[![License](https://poser.pugx.org/inpin/lara-report/license)](https://packagist.org/packages/inpin/lara-report)
 
 Trait for Laravel Eloquent models to allow easy implementation of a "user report" feature.
 
