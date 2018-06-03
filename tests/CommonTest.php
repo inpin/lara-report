@@ -626,6 +626,28 @@ class CommonTest extends TestCase
         $this->assertEquals($report->id, $reportItem->reports[0]->id);
     }
 
+    public function TestDeleteModel()
+    {
+        $stub = $this->createRandomStub();
+        $user = $this->createRandomUser();
+
+        /** @var Report $report */
+        $report = $stub->reports()->save(new Report([
+            'user_id'      => $user->id,
+            'user_message' => $this->faker->text,
+        ]));
+
+        /** @var ReportItem $reportItem */
+        $reportItem = ReportItem::query()->inRandomOrder()->first();
+
+        $report->reportItems()->attach($reportItem->id);
+
+        $stub->delete();
+
+        $this->assertDatabaseMissing('larareport_reports', []);
+        $this->assertDatabaseMissing('larareport_rel_report_report_item', []);
+    }
+
     public function TestReportsModelOfReportItemsModelWhenNoReportAttached()
     {
         /** @var ReportItem $reportItem */
