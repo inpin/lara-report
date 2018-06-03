@@ -165,7 +165,6 @@ trait Reportable
      */
     public function removeReports()
     {
-        dd('here');
         $reports = Report::query()
             ->where('reportable_type', $this->getMorphClass())
             ->where('reportable_id', $this->id)
