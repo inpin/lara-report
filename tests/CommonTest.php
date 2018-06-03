@@ -99,6 +99,7 @@ class CommonTest extends TestCase
         $reportItems = ReportItem::query()->inRandomOrder()->take(3)->get();
         $userMessage = $this->faker->text;
         $this->assertFalse($stub->isReported());
+        $this->assertFalse($stub->isReported);
 
         $report = $stub->createReport($reportItems->pluck('id')->toArray(), $userMessage);
 
@@ -122,7 +123,9 @@ class CommonTest extends TestCase
             ]);
         }
         $this->assertEquals(1, $stub->reportsCount());
+        $this->assertEquals(1, $stub->reportsCount);
         $this->assertTrue($stub->isReported());
+        $this->assertTrue($stub->isReported);
     }
 
     public function testReportWithUser()
@@ -162,8 +165,10 @@ class CommonTest extends TestCase
             ]);
         }
         $this->assertEquals(1, $stub->reportsCount());
+        $this->assertEquals(1, $stub->reportsCount);
         $this->assertTrue($stub->isReported($reporter));
         $this->assertFalse($stub->isReported());
+        $this->assertFalse($stub->isReported);
     }
 
     public function testMultipleReports()
@@ -211,9 +216,11 @@ class CommonTest extends TestCase
 
             $this->assertTrue($stub->isReported($datum['reporter']));
             $this->assertFalse($stub->isReported());
+            $this->assertFalse($stub->isReported);
         }
 
         $this->assertEquals(count($data), $stub->reportsCount());
+        $this->assertEquals(count($data), $stub->reportsCount);
     }
 
     public function testRecreateReport()
@@ -233,7 +240,9 @@ class CommonTest extends TestCase
         $report->reportItems()->attach($reportItems->pluck('id')->toArray());
 
         $this->assertEquals(1, $stub->reportsCount());
+        $this->assertEquals(1, $stub->reportsCount);
         $this->assertTrue($stub->isReported());
+        $this->assertTrue($stub->isReported);
 
         $newUserMessage = $this->faker->text;
         $newReportItems = ReportItem::query()
@@ -283,7 +292,9 @@ class CommonTest extends TestCase
         }
 
         $this->assertEquals(1, $stub->reportsCount());
+        $this->assertEquals(1, $stub->reportsCount);
         $this->assertTrue($stub->isReported());
+        $this->assertTrue($stub->isReported);
     }
 
     public function testRecreateReportWithUser()
@@ -303,6 +314,7 @@ class CommonTest extends TestCase
         $report->reportItems()->attach($reportItems->pluck('id')->toArray());
 
         $this->assertEquals(1, $stub->reportsCount());
+        $this->assertEquals(1, $stub->reportsCount);
         $this->assertTrue($stub->isReported($reporter));
 
         $newUserMessage = $this->faker->text;
@@ -353,8 +365,10 @@ class CommonTest extends TestCase
         }
 
         $this->assertEquals(1, $stub->reportsCount());
+        $this->assertEquals(1, $stub->reportsCount);
         $this->assertTrue($stub->isReported($reporter));
         $this->assertFalse($stub->isReported());
+        $this->assertFalse($stub->isReported);
     }
 
     public function testAssignReport()
