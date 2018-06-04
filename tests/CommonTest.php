@@ -606,7 +606,7 @@ class CommonTest extends LaraReportTestCase
         $this->assertEquals(0, $report->reportItems()->count());
     }
 
-    public function TestReportsModelOfReportItemsModel()
+    public function testReportsModelOfReportItemsModel()
     {
         $stub = $this->createRandomStub();
         $user = $this->createRandomUser();
@@ -626,7 +626,7 @@ class CommonTest extends LaraReportTestCase
         $this->assertEquals($report->id, $reportItem->reports[0]->id);
     }
 
-    public function TestDeleteModel()
+    public function testDeleteModel()
     {
         $stub = $this->createRandomStub();
         $user = $this->createRandomUser();
@@ -648,7 +648,7 @@ class CommonTest extends LaraReportTestCase
         $this->assertDatabaseMissing('larareport_rel_report_report_item', []);
     }
 
-    public function TestReportsModelOfReportItemsModelWhenNoReportAttached()
+    public function testReportsModelOfReportItemsModelWhenNoReportAttached()
     {
         /** @var ReportItem $reportItem */
         $reportItem = ReportItem::query()->inRandomOrder()->first();
