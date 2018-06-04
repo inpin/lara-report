@@ -5,7 +5,7 @@ namespace Tests;
 use Inpin\LaraReport\LaraReportServiceProvider;
 use Orchestra\Database\ConsoleServiceProvider;
 
-class TestCase extends \Orchestra\Testbench\TestCase
+class LaraReportTestCase extends \Orchestra\Testbench\TestCase
 {
     protected function getPackageProviders($app)
     {

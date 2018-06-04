@@ -11,7 +11,7 @@ use Inpin\LaraReport\Report;
 use Inpin\LaraReport\Reportable;
 use Inpin\LaraReport\ReportItem;
 
-class CommonTest extends TestCase
+class CommonTest extends LaraReportTestCase
 {
     /**
      * @var Generator
