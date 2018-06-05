@@ -34,7 +34,7 @@ trait Reportable
     public function scopeWhereReportedBy($query, $guard = null)
     {
         if (!($guard instanceof User)) {
-            $guard = $this->loggedInUser($guard);
+            $guard = $this->getLoggedInUserForLaraReport($guard);
         }
 
         return $query->whereHas('reports', function ($query) use ($guard) {
@@ -73,7 +73,7 @@ trait Reportable
     public function createReport(array $reportItemIds = [], $userMessage = null, $guard = null)
     {
         if (!($guard instanceof User)) {
-            $guard = $this->loggedInUser($guard);
+            $guard = $this->getLoggedInUserForLaraReport($guard);
 
             if (is_null($guard)) {
                 return;
@@ -109,7 +109,7 @@ trait Reportable
     public function isReported($guard = null)
     {
         if (!($guard instanceof User)) {
-            $guard = $this->loggedInUser($guard);
+            $guard = $this->getLoggedInUserForLaraReport($guard);
 
             if (is_null($guard)) {
                 return false;
@@ -131,7 +131,7 @@ trait Reportable
      *
      * @return \Illuminate\Contracts\Auth\Authenticatable|null
      */
-    public function loggedInUser($guard)
+    public function getLoggedInUserForLaraReport($guard)
     {
         return auth($guard)->user();
     }
