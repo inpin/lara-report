@@ -2,6 +2,7 @@
 
 namespace Tests;
 
+use Carbon\Carbon;
 use Faker\Generator;
 use Illuminate\Database\Eloquent\Model as Eloquent;
 use Illuminate\Foundation\Auth\User;
@@ -293,6 +294,81 @@ class CommonTest extends LaraReportTestCase
 
         $this->assertEquals(1, $stub->reportsCount());
         $this->assertEquals(1, $stub->reportsCount);
+        $this->assertTrue($stub->isReported());
+        $this->assertTrue($stub->isReported);
+    }
+
+    public function testRecreateReportOnResolvedReport()
+    {
+        $stub = $this->createRandomStub();
+        $user = $this->createRandomUser();
+        $this->actingAs($user);
+
+        $userMessage = $this->faker->text;
+        $reportItems = ReportItem::query()->inRandomOrder()->take(3)->get();
+
+        /** @var Report $report */
+        $report = $stub->reports()->save(new Report([
+            'user_id'      => $user->id,
+            'user_message' => $userMessage,
+            'resolved_at'  => $now = Carbon::now()->toDateTimeString(),
+        ]));
+        $report->reportItems()->attach($reportItems->pluck('id')->toArray());
+
+        $this->assertEquals(1, $stub->reportsCount());
+        $this->assertEquals(1, $stub->reportsCount);
+        $this->assertTrue($stub->isReported());
+        $this->assertTrue($stub->isReported);
+
+        $newUserMessage = $this->faker->text;
+        $newReportItems = ReportItem::query()
+            ->whereNotIn('id', $reportItems->pluck('id')->toArray())
+            ->inRandomOrder()
+            ->take(3)
+            ->get();
+
+        $newReport = $stub->createReport($newReportItems->pluck('id')->toArray(), $newUserMessage);
+
+        $this->assertDatabaseHas('larareport_reports', ['id' => $report->id]);
+
+        $this->assertDatabaseHas('larareport_reports', [
+            'reportable_type' => $stub->getMorphClass(),
+            'reportable_id'   => $stub->id,
+            'user_id'         => $user->id,
+            'user_message'    => $userMessage,
+            'admin_id'        => null,
+            'admin_message'   => null,
+            'resolved_at'     => $now,
+        ]);
+
+        /** @var ReportItem $reportItem */
+        foreach ($reportItems as $reportItem) {
+            $this->assertDatabaseHas('larareport_rel_report_report_item', [
+                'report_id'      => $report->id,
+                'report_item_id' => $reportItem->id,
+            ]);
+        }
+
+        $this->assertDatabaseHas('larareport_reports', [
+            'reportable_type' => $stub->getMorphClass(),
+            'reportable_id'   => $stub->id,
+            'user_id'         => $user->id,
+            'user_message'    => $newUserMessage,
+            'admin_id'        => null,
+            'admin_message'   => null,
+            'resolved_at'     => null,
+        ]);
+
+        /** @var ReportItem $reportItem */
+        foreach ($newReportItems as $reportItem) {
+            $this->assertDatabaseHas('larareport_rel_report_report_item', [
+                'report_id'      => $newReport->id,
+                'report_item_id' => $reportItem->id,
+            ]);
+        }
+
+        $this->assertEquals(2, $stub->reportsCount());
+        $this->assertEquals(2, $stub->reportsCount);
         $this->assertTrue($stub->isReported());
         $this->assertTrue($stub->isReported);
     }

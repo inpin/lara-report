@@ -26,7 +26,7 @@ trait Reportable
      * Fetch records that are reported by a given user.
      * Ex: Book::whereReportedBy(123)->get();.
      *
-     * @param Builder          $query
+     * @param Builder $query
      * @param User|string|null $guard
      *
      * @return Builder|static
@@ -80,14 +80,17 @@ trait Reportable
             }
         }
 
-        $report = $this->reports()->where('user_id', '=', $guard->id)->first();
+        $report = $this->reports()
+            ->where('user_id', '=', $guard->id)
+            ->whereNull('resolved_at')
+            ->first();
 
         if (!is_null($report)) {
             $report->delete();
         }
 
         $report = new Report([
-            'user_id'      => $guard->id,
+            'user_id' => $guard->id,
             'user_message' => $userMessage,
         ]);
 
